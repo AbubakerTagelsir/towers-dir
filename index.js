@@ -16,8 +16,8 @@ app.get('/', (request, response) => {
     response.json({ info: `Node.js, Express, and Postgres API ${port}` })
   })
 
-const towersRoutes = require('./routes/index');
-app.use('/api/towers', towersRoutes);
+const allRoutes = require('./routes/index');
+app.use('/api/', allRoutes);
 //   app.get('/users', db.getUsers)
 // app.get('/users/:id', db.getUserById)
 // app.post('/users', db.createUser)
