@@ -3,13 +3,9 @@ const userControllers = require('../controllers/users');
 const router = require('express').Router();
 
 
-router.get('/login', userControllers.login);
+router.get('/:userId', userControllers.getUser);
 
-router.put('/:towerId', towersController.updateTower);
-
-router.post('/', towersController.createTower);
-
-router.get('/search/:keyword', towersController.searchTowers);
+router.put('/:userId', userControllers.updateUser);
 
 router.get('/', userControllers.listUsers);
 

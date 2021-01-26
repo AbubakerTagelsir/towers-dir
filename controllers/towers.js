@@ -3,15 +3,19 @@ const {Tower} = require("../models/");
 module.exports = {
   // create
   async createTower(req, res) {
+    const {name,location,noFloors,noOffices,rating,longitude,latitude} = req.body;
+    if(!name || !location || !longitude || !latitude){
+      return res.status(401).send({name: "please fill all mandatory fields!"})
+    }
     try {
       const newTower = await Tower.create({
-        name: req.body.name,
-        location: req.body.location,
-        noFloors: req.body.noFloors,
-        noOffices: req.body.noOffices,
-        rating: req.body.rating,
-        longitude: req.body.longitude,
-        latitude: req.body.latitude,
+        name: name,
+        location: location,
+        noFloors: noFloors,
+        noOffices: noOffices,
+        rating: rating,
+        longitude: longitude,
+        latitude: latitude,
       });
       res.status(201).send(newTower);
     } catch (e) {
@@ -23,8 +27,12 @@ module.exports = {
   // list
 
   async listTowers(req, res) {
+    const {showWithTowers} = req.query;
+    let searchFilter = {}
+    if(showWithTowers){
+    }
     try {
-      const towersList = await Tower.findAll({});
+      const towersList = await Tower.findAll(searchFilter);
 
       if (!towersList) {
         return res.status(404).send("No towers available!");
