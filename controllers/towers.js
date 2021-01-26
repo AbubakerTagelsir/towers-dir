@@ -1,6 +1,4 @@
-const models = require("../models/");
-
-const Tower = models.Tower;
+const {Tower} = require("../models/");
 
 module.exports = {
   // create
