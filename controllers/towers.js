@@ -1,4 +1,5 @@
 const {Tower} = require("../models/");
+const {Op} = require('sequelize');
 
 module.exports = {
   // create
@@ -24,15 +25,44 @@ module.exports = {
     }
   },
 
-  // list
+  // listing API
 
   async listTowers(req, res) {
+    const {filters,sortBy,sortOrder,limit,offset} = req.body;
     const {showWithTowers} = req.query;
-    let searchFilter = {}
+
+    let searchFilter = {where: {}}
+    
+    // limit & offset to apply pagination
+    if(limit == parseInt(limit)){
+      searchFilter.limit = limit;
+    }
+    if(offset == parseInt(offset)){
+      searchFilter.offset = offset;
+    }
+
+    // parameters to show only offices towers
     if(showWithTowers){
     }
+
+    // sorting
+    if(sortBy){
+      if(sortBy in ['id', 'name', 'location', 'noFloors', 'noOffices', 'longitude', 'latitude']){
+        if(!sortOrder in ['ASC', 'DESC']){
+          sortOrder = 'ASC';
+        }
+        searchFilter.order = [[sortBy, sortOrder]]
+      }
+    }
+
+
+    // filter
+
+    searchFilter.where = filters || {};
+
+
     try {
-      const towersList = await Tower.findAll(searchFilter);
+      const towersList = await Tower.findAndCountAll(searchFilter);
 
       if (!towersList) {
         return res.status(404).send("No towers available!");
@@ -105,13 +135,19 @@ module.exports = {
   },
   // search
   async searchTowers(req, res) {
+
+    const {keyword} = req.query;
+    const {searchBy} = req.body;
+    const searchFilter = {}
+    searchFilter[searchBy] = {[Op.like]: '%' + keyword + '%'};
+
     try {
-      const towersList = await Tower.findOne({
-          where: { id: towerId }
+      const towersList = await Tower.findAndCountAll({
+          where: searchFilter
       });
 
       if (!towersList) {
-        return res.status(404).send("No towers available!");
+        return res.status(404).send("No towers with the search criteria!");
       }
 
       res.status(201).send(towersList);

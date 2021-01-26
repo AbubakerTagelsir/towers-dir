@@ -10,7 +10,7 @@ passport.use(new JWTStrategy({
   secretOrKey   : constants.secretOrKey
 },
  function (jwtPayload, done) {
-   return User.findOne(jwtPayload.sub)
+   return User.findByPk(jwtPayload.sub)
    .then(user => 
    {
      return done(null, user);
