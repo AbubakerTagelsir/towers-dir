@@ -27,12 +27,15 @@ module.exports = {
   // list
 
   async listTowers(req, res) {
-    const {showWithTowers} = req.query;
-    let searchFilter = {}
+    const {showWithTowers,sortBy,sortOrder,limit,offset} = req.query;
+    let searchFilter = {limit:limit, offset:offset, where: {}}
     if(showWithTowers){
     }
+    if(sortBy){
+      searchFilter.order = [[sortBy, sortOrder || 'ASC']]
+    }
     try {
-      const towersList = await Tower.findAll(searchFilter);
+      const towersList = await Tower.findAndCountAll(searchFilter);
 
       if (!towersList) {
         return res.status(404).send("No towers available!");
