@@ -2,17 +2,15 @@ const userControllers = require('../controllers/users');
 
 const router = require('express').Router();
 
+const passport = require('passport');
 
-router.get('/login', userControllers.login);
 
-router.put('/:towerId', towersController.updateTower);
+router.get('/:userId', userControllers.getUser);
 
-router.post('/', towersController.createTower);
-
-router.get('/search/:keyword', towersController.searchTowers);
+router.put('/:userId', passport.authenticate('jwt', {session: false}), userControllers.updateUser);
 
 router.get('/', userControllers.listUsers);
 
-router.delete('/', userControllers.deleteUser);
+router.delete('/', passport.authenticate('jwt', {session: false}), userControllers.deleteUser);
 
 module.exports = router;
