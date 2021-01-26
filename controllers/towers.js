@@ -1,5 +1,6 @@
 const {Tower} = require("../models/");
 const {Op} = require('sequelize');
+const io = require('socket.io')();
 
 module.exports = {
   // create
@@ -18,10 +19,15 @@ module.exports = {
         longitude: longitude,
         latitude: latitude,
       });
-      res.status(201).send(newTower);
+
+      io.emit("towerCreation", {
+        message: `${newTower.name} has been created!`
+      });
+
+      return res.status(201).send(newTower);
     } catch (e) {
       console.log(e);
-      res.status(400).send(e);
+      return res.status(400).send(e);
     }
   },
 
