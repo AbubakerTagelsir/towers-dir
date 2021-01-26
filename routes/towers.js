@@ -3,9 +3,12 @@ const towersController = require('../controllers/towers');
 const router = require('express').Router();
 
 const passport = require('passport');
+const useCache = require('../utils/cache');
+
+require('../utils/cache');
 
 
-router.get('/', towersController.listTowers);
+router.get('/', useCache(100), towersController.listTowers);
 
 router.put('/:towerId', passport.authenticate('jwt', {session: false}), towersController.updateTower);
 

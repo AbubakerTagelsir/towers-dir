@@ -67,8 +67,11 @@ module.exports = {
       if (!towersList) {
         return res.status(404).send("No towers available!");
       }
-
-      res.status(201).send(towersList);
+      setTimeout(() => {
+        res.status(201).send(towersList);
+  
+      }, 5000);
+      
     } catch (e) {
       console.log(e);
       res.status(400).send(e);
