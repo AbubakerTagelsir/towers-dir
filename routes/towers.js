@@ -11,7 +11,7 @@ router.put('/:towerId', passport.authenticate('jwt', {session: false}), towersCo
 
 router.post('/', passport.authenticate('jwt', {session: false}), towersController.createTower);
 
-router.get('/search/:keyword', towersController.searchTowers);
+router.get('/search/', towersController.searchTowers);
 
 router.get('/:towerId', towersController.fetchTower);
 
