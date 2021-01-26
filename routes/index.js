@@ -1,18 +1,7 @@
-const towersController = require('./towers');
-
 const router = require('express').Router();
+const towersRoutes = require('./towers');
 
+router.use('/towers', towersRoutes);
 
-router.get('/', towersController.listTowers);
-
-router.put('/:towerId', towersController.updateTower);
-
-router.post('/', towersController.createTower);
-
-router.get('/search/:keyword', towersController.searchTowers);
-
-router.get('/:towerId', towersController.fetchTower);
-
-router.delete('/:towerId', towersController.deleteTower);
 
 module.exports = router;
