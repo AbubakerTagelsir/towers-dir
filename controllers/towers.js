@@ -68,14 +68,14 @@ module.exports = {
       });
 
       if (!existingTower) {
-        res.status(404).send("Tower Not Found");
+       return res.status(404).send("Tower Not Found");
       } 
       await existingTower.update(req.body);
-      res.status(200).send(existingTower);
+      return res.status(200).send(existingTower);
       
     } catch (e) {
       console.log(e);
-      res.status(400).send(e);
+      return res.status(400).send(e);
     }
   },
 
