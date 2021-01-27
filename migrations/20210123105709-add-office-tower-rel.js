@@ -18,6 +18,6 @@ module.exports = {
     );
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.removeColumn('Office', 'towerId');
+    return queryInterface.removeColumn('Offices', 'towerId');
   }
 }

@@ -35,7 +35,7 @@ module.exports = {
 
   async listTowers(req, res) {
     const {filters,sortBy,sortOrder,limit,offset} = req.body;
-    const {showWithTowers} = req.query;
+    const {showWithOffices} = req.query;
 
     let searchFilter = {where: {}}
     
@@ -47,9 +47,6 @@ module.exports = {
       searchFilter.offset = offset;
     }
 
-    // parameters to show only offices towers
-    if(showWithTowers){
-    }
 
     // sorting
     if(sortBy){
@@ -65,7 +62,12 @@ module.exports = {
     // filter
 
     searchFilter.where = filters || {};
-
+    // parameters to show only offices towers
+    if(showWithOffices){
+      searchFilter.where.noOffices =  {
+        [Op.gt]: 0
+      }
+    }
 
     try {
       const towersList = await Tower.findAndCountAll(searchFilter);
@@ -73,10 +75,7 @@ module.exports = {
       if (!towersList) {
         return res.status(404).send("No towers available!");
       }
-      setTimeout(() => {
-        res.status(201).send(towersList);
-  
-      }, 5000);
+      return res.status(201).send(towersList);
       
     } catch (e) {
       console.log(e);
