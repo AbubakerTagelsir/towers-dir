@@ -25,5 +25,9 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     modelName: 'Tower',
   });
+
+  Tower.associate = (models) => {
+    Tower.hasMany(models.Office, {as: 'Offices'});
+  };
   return Tower;
 };

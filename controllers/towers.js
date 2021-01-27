@@ -1,5 +1,6 @@
 const {Tower} = require("../models/");
 const {Op} = require('sequelize');
+const io = require('socket.io')();
 
 module.exports = {
   // create
@@ -18,10 +19,15 @@ module.exports = {
         longitude: longitude,
         latitude: latitude,
       });
-      res.status(201).send(newTower);
+
+      io.emit("towerCreation", {
+        message: `${newTower.name} has been created!`
+      });
+
+      return res.status(201).send(newTower);
     } catch (e) {
       console.log(e);
-      res.status(400).send(e);
+      return res.status(400).send(e);
     }
   },
 
@@ -29,7 +35,7 @@ module.exports = {
 
   async listTowers(req, res) {
     const {filters,sortBy,sortOrder,limit,offset} = req.body;
-    const {showWithTowers} = req.query;
+    const {showWithOffices} = req.query;
 
     let searchFilter = {where: {}}
     
@@ -41,9 +47,6 @@ module.exports = {
       searchFilter.offset = offset;
     }
 
-    // parameters to show only offices towers
-    if(showWithTowers){
-    }
 
     // sorting
     if(sortBy){
@@ -59,7 +62,12 @@ module.exports = {
     // filter
 
     searchFilter.where = filters || {};
-
+    // parameters to show only offices towers
+    if(showWithOffices){
+      searchFilter.where.noOffices =  {
+        [Op.gt]: 0
+      }
+    }
 
     try {
       const towersList = await Tower.findAndCountAll(searchFilter);
@@ -67,10 +75,7 @@ module.exports = {
       if (!towersList) {
         return res.status(404).send("No towers available!");
       }
-      setTimeout(() => {
-        res.status(201).send(towersList);
-  
-      }, 5000);
+      return res.status(201).send(towersList);
       
     } catch (e) {
       console.log(e);
