@@ -10,7 +10,8 @@
     "db:migrate": "sequelize-cli db:migrate",
     "db:g:migration": "sequelize-cli migration:generate --name",
     "db:g:seed": "sequelize-cli seed:generate --name",
-    "db:seeds": "sequelize-cli db:seed:all"
+    "db:seeds": "sequelize-cli db:seed:all",
+    "start": "node -r dotenv/config index.js"
   },
   "keywords": [],
   "author": "Abubaker Tagelsir <abubaker.tagelsir@gmail.com>",
